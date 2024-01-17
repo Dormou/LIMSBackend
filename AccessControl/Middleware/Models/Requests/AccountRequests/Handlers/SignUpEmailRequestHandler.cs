@@ -31,25 +31,21 @@ public class SignUpEmailRequestHandler : IRequestHandler<SignUpEmailRequest, Sig
         {
             if (!new EmailAddressAttribute().IsValid(request.Email) && request.Email is not null) throw new BadHttpRequestException("Email not valid");
 
-            if (!new Regex(@"^[\w$&_]{5,24}$").IsMatch(request.Nickname)) throw new BadHttpRequestException("Nick not valid");
-
             if (!new Regex(@"^\S{4,23}$").IsMatch(request.Password)) throw new BadHttpRequestException("Password not valid");
 
             if (await _accountRepo.FindByEmailAsync(request.Email) is not null) throw new BadHttpRequestException("Email is busy");
-
-            if (await _accountRepo.FindByNickNameAsync(request.Nickname) is not null) throw new BadHttpRequestException("Nick is busy");
 
             var account = Account.From(request);
 
             await _accountRepo.AddAsync(account);
 
             await _emailService.SendEmailAsync(
-                account.Nickname,
+                account.Firstname,
                 account.Email,
                 "SignIn Library",
                 $"Activation code: {account.ActivationCode}");
 
-           // await _accountRepo._db..SaveEntitiesAsync(cancellationToken);
+           await _accountRepo.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
             return new SignUpResponse(Message: "Code send to you email");
         }

@@ -51,7 +51,7 @@ public class ActivationRequestHandler //: IRequestHandler<ActivationRequest, Act
             account.ActivationCode = string.Empty;
             account.AccessStatus = AccessStatus.Active;
 
-            //await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
+            await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return new ActivationResponse(Token: encodedJwt, Message: "Access true");
         }

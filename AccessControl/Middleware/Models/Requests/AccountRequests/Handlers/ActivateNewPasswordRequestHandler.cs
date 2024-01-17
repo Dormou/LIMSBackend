@@ -55,7 +55,7 @@ public class ActivateNewPasswordRequestHandler //: IRequestHandler<ActivateNewPa
             account.Password = request.Password;
             account.AccessStatus = AccessStatus.Active;
 
-            //await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
+            await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return new ActivateNewPasswordResponse(Token: encodedJwt, Message: $"Access true");
         }

@@ -48,7 +48,7 @@ public class SignInEmailRequestHandler : IRequestHandler<SignInEmailRequest, Sig
 
             var operationSystem = UserAgentParser.GetOperatingSystem(userAgent);
 
-            //await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
+            await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return new SignInResponse(Token: encodedJwt, Message: "Access true");
         }

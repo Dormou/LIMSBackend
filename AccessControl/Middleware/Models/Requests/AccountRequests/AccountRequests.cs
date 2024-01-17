@@ -12,9 +12,9 @@ public record SignInEmailRequest(
 ): IRequest;
 
 public record SignUpEmailRequest(
-    [JsonProperty("nickname")] string Nickname,
+    [JsonProperty("firstname")] string Firstname,
+    [JsonProperty("lastname")] string Lastname,
     [JsonProperty("email")] string Email,
-    [JsonProperty("phone-number")] string PhoneNumber,
     [JsonProperty("password")] string Password
 ) 
 : IAddAccountCommand, IRequest;

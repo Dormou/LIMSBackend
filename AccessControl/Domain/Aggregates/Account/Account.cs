@@ -15,10 +15,10 @@ public class Account : Entity, IAggregateRoot
         {
             AccessStatus = AccessStatus.WaitActivate,
             ActivationCode = $"{new Random().Next(000000, 999999)}",
-            Nickname = command.Nickname,
+            Firstname = command.Firstname,
             Password = command.Password,
             Email = command.Email,
-            PhoneNumber = command.PhoneNumber,
+            Lastname = command.Lastname,
 
             PasswordAt = now,
             PhoneNumberAt = now,
@@ -33,11 +33,11 @@ public class Account : Entity, IAggregateRoot
 
     public AccessStatus AccessStatus { get; set; }
     public string ActivationCode { get; set; }
-    public string Nickname { get; set; }
+    public string Firstname { get; set; }
     public string Password { get; set; }
     public DateTime PasswordAt { get; set; }
     public string Email { get; set; }
     public DateTime EmailAt { get; set; }
-    public string PhoneNumber { get; set; }
+    public string Lastname { get; set; }
     public DateTime PhoneNumberAt { get; set; }
 }

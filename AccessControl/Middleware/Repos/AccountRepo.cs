@@ -12,7 +12,7 @@ public class AccountRepo : IAccountRepo
 
     public AccountRepo(Context db) => _db = db;
 
-    //public IUnitOfWork UnitOfWork => _db;
+    public IUnitOfWork UnitOfWork => _db;
 
     public async Task AddAsync(Account account) => await _db.Accounts.AddAsync(account);
 
@@ -21,8 +21,6 @@ public class AccountRepo : IAccountRepo
     public async Task<Account> FindByEmailAsync(string Email) => await _db.Accounts.FirstOrDefaultAsync(acc => acc.Email == Email);
 
     public Task<Account> FindByIdAsync(Guid Id) => _db.Accounts.FirstOrDefaultAsync(acc => acc.Id == Id);
-
-    public Task<Account> FindByNickNameAsync(string Nick) => _db.Accounts.FirstOrDefaultAsync(acc => acc.Nickname == Nick);
 
     public async Task RemoveById(Guid Id) => _db.Accounts.Remove(await _db.Accounts
         .FirstOrDefaultAsync(acc => acc.Id == Id)

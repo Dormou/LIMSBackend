@@ -2,8 +2,8 @@
 
 public interface IAddAccountCommand
 {
-    string Nickname { get; }
+    string Firstname { get; }
     string Password { get; }
     string Email { get; }
-    string PhoneNumber { get; }
+    string Lastname { get; }
 }

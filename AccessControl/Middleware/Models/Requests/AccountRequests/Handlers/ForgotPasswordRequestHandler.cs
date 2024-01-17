@@ -41,14 +41,14 @@ public class ForgotPasswordRequestHandler //: IRequestHandler<ForgotPasswordRequ
             account.AccessStatus = AccessStatus.WaitChangePassword;
 
             var isSendToEmail = await _emailService.SendEmailAsync(
-                  account.Nickname,
+                  account.Firstname,
                   account.Email,
                   "Recovery access in Library", 
                   $"Activation link: {account.ActivationCode}");
 
             if(!isSendToEmail) throw new BadHttpRequestException("Not send code send to email");
 
-            //await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
+            await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return new ForgotPasswordResponse(Message: "Code send to email");
         }
