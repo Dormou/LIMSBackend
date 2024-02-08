@@ -1,4 +1,5 @@
 ﻿using AccessControl.Middleware.Models.Requests.AccountRequests;
+using AccessControl.Passport.Api.Requests.AccountRequests.Handlers;
 using AccessControl.Passport.Api.Requests.Handlers;
 using AccessControl.Requests;
 using AccessControl.Responses;
@@ -15,9 +16,8 @@ public static class ApplicationExtensions
     public static IServiceCollection ConfigureApplicationHandlers(this IServiceCollection services) => services
         .AddScoped<IRequestHandler<SignInEmailRequest, SignInResponse>, SignInEmailRequestHandler>()
         .AddScoped<IRequestHandler<SignUpEmailRequest, SignUpResponse>, SignUpEmailRequestHandler>()
-        //.AddScoped<IRequestHandler<ActivateNewPasswordRequest, ActivateNewPasswordResponse>, ActivateNewPasswordRequestHandler>()
-        //.AddScoped<IRequestHandler<ActivationRequest, ActivationResponse>, ActivationRequestHandler>()
-        //.AddScoped<IRequestHandler<ForgotPasswordRequest, ForgotPasswordResponse>, ForgotPasswordRequestHandler>()
-        //.AddScoped<IRequestHandler<SignOutRequest, SignOutResponse>, SignOutRequestHandler>()
-        ;
+        .AddScoped<IRequestHandler<ActivateNewPasswordRequest, ActivateNewPasswordResponse>, ActivateNewPasswordRequestHandler>()
+        .AddScoped<IRequestHandler<ActivationRequest, ActivationResponse>, ActivationRequestHandler>()
+        .AddScoped<IRequestHandler<ForgotPasswordRequest, ForgotPasswordResponse>, ForgotPasswordRequestHandler>()
+        .AddScoped<IRequestHandler<SignOutRequest, SignOutResponse>, SignOutRequestHandler>();
 }

@@ -10,10 +10,11 @@ using AccessControl.Domain.Aggregates.Account;
 using AccessControl.Domain.Aggregates.Account.Enums;
 using AccessControl.Domain.Services.UserAgentParser;
 using AccessControl.Requests.AccountRequests.Handlers;
+using AccessControl.Middleware.Models.Requests.AccountRequests;
 
 namespace AccessControl.Passport.Api.Requests.AccountRequests.Handlers;
 
-public class ActivateNewPasswordRequestHandler //: IRequestHandler<ActivateNewPasswordRequest, ActivateNewPasswordResponse>
+public class ActivateNewPasswordRequestHandler : IRequestHandler<ActivateNewPasswordRequest, ActivateNewPasswordResponse>
 {
     private readonly JWTOptions _jwtOptions;
     private readonly IAccountRepo _accountRepo;

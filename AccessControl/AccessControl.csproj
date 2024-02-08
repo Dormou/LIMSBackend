@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Folder Include="Domain\Aggregates\Account\Values\" />
+    <Folder Include="Middleware\Models\" />
   </ItemGroup>
 
 </Project>

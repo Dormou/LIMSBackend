@@ -5,7 +5,10 @@ namespace AccessControl.Responses;
 public interface IResponse { };
 
 public record SignInResponse(
-    [JsonProperty("token")] string Token, 
+    [JsonProperty("token")] string Token,
+    [JsonProperty("firstname")] string Firstname,
+    [JsonProperty("lastname")] string Lastname,
+    [JsonProperty("email")] string Email,
     [JsonProperty("message")] string Message
 ) : IResponse;
 

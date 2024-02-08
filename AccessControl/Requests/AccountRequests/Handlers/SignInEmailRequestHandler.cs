@@ -1,44 +1,44 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Net;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 
-using AccessControl.Responses;
 using AccessControl.Options;
+using AccessControl.Responses;
 using AccessControl.Requests;
 using AccessControl.Domain.Aggregates.Account;
-using AccessControl.Domain.Aggregates.Account.Enums;
-using AccessControl.Domain.Services.UserAgentParser;
 using AccessControl.Requests.AccountRequests.Handlers;
+using AccessControl.Domain.Services.UserAgentParser;
+using AccessControl.Middleware.Models.Requests.AccountRequests;
 
 namespace AccessControl.Passport.Api.Requests.Handlers;
 
-public class ActivationRequestHandler //: IRequestHandler<ActivationRequest, ActivationResponse>
+public class SignInEmailRequestHandler : IRequestHandler<SignInEmailRequest, SignInResponse>
 {
     private readonly JWTOptions _jwtOptions;
     private readonly IAccountRepo _accountRepo;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ILogger<ActivationRequestHandler> _logger;
+    private readonly ILogger<SignInEmailRequestHandler> _logger;
 
-    public ActivationRequestHandler(
+    public SignInEmailRequestHandler(
         IAccountRepo accountRepo,
         IHttpContextAccessor httpContextAccessor,
         IOptions<JWTOptions> jwtOptions,
-        ILogger<ActivationRequestHandler> logger)
+        ILogger<SignInEmailRequestHandler> logger)
     {
         _accountRepo = accountRepo;
         _httpContextAccessor = httpContextAccessor;
         _jwtOptions = jwtOptions.Value;
         _logger = logger;
     }
-
-    public async Task<ActivationResponse> Handle(ActivationRequest request, CancellationToken cancellationToken)
+    public async Task<SignInResponse> Handle(SignInEmailRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var account = await _accountRepo.FindByActivationCodeAsync(request.Code);
+            var account = await _accountRepo.FindByEmailAsync(request.Email);
 
             if (account is null) throw new BadHttpRequestException("Account not found");
 
-            if (account.AccessStatus != AccessStatus.WaitActivate) throw new BadHttpRequestException("Account not wait activate");
+            if (account.Password != request.Password) throw new BadHttpRequestException("Bad password");
 
             var jwtToken = new JwtToken(account.Id, _jwtOptions.SecretKey, _jwtOptions.Issuer, _jwtOptions.ExpiresHours).Value;
 
@@ -48,19 +48,21 @@ public class ActivationRequestHandler //: IRequestHandler<ActivationRequest, Act
 
             var operationSystem = UserAgentParser.GetOperatingSystem(userAgent);
 
-            account.ActivationCode = string.Empty;
-            account.AccessStatus = AccessStatus.Active;
-
             await _accountRepo.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new ActivationResponse(Token: encodedJwt, Message: "Access true");
+            return new SignInResponse(
+                Token: encodedJwt, 
+                Firstname: account.Firstname,
+                Lastname: account.Lastname,
+                Email: account.Email, 
+                Message: "Access true"
+            );
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError($"Error with signin. Error: {ex}");
 
-            throw;
+            throw new HttpRequestException("Error with attemping signin.", ex, HttpStatusCode.InternalServerError);
         }
-
     }
 }

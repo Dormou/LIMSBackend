@@ -7,10 +7,11 @@ using AccessControl.Options;
 using AccessControl.Services;
 using AccessControl.Domain.Aggregates.Account;
 using AccessControl.Domain.Aggregates.Account.Enums;
+using AccessControl.Middleware.Models.Requests.AccountRequests;
 
 namespace AccessControl.Passport.Api.Requests.AccountRequests.Handlers;
 
-public class ForgotPasswordRequestHandler //: IRequestHandler<ForgotPasswordRequest, ForgotPasswordResponse>
+public class ForgotPasswordRequestHandler : IRequestHandler<ForgotPasswordRequest, ForgotPasswordResponse>
 {
     private readonly JWTOptions _jwtOptions;
     private readonly IEmailService _emailService;
